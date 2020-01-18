@@ -1,7 +1,7 @@
 const Dev = require('../models/Dev');
 const parseStringAsArray = require('../../utils/parseStringAsArray');
 
-class SearchController {
+module.exports = {
   async index(req, res) {
     // Buscar todos os devs num raio 10km
     // Filtrar por tecnologia
@@ -27,5 +27,3 @@ class SearchController {
     return res.json(devs);
   }
 }
-
-module.exports = new SearchController();
