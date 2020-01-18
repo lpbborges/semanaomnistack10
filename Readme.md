@@ -11,7 +11,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 ## Objetivo
 
-O objetivo do projeto é o de fornecer uma ferramente onde você possa buscar por desenvolvedores próximos que utilize determinada tecnologia. 
+O objetivo do projeto é fornecer uma ferramenta que busque por desenvolvedores próximos que utilize determinada tecnologia. 
 
 ## Licença
 
