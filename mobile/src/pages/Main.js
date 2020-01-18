@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Image,
@@ -15,6 +16,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 
 import api from '../services/api';
+import { connect, disconnect, subscribeToNewDevs } from '../services/socket';
 
 const styles = StyleSheet.create({
   map: {
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function Main({ navigation }) {
+export default function Main({ navigation }) {
   const [devs, setDevs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState(null);
   const [techs, setTechs] = useState('');
@@ -103,6 +105,22 @@ function Main({ navigation }) {
     loadInitialPosition();
   }, []);
 
+  useEffect(() => {
+    subscribeToNewDevs(dev => setDevs([...devs, dev]));
+  }, [devs]);
+
+  function setupWebsocket() {
+    disconnect();
+
+    const { latitude, longitude } = currentRegion;
+
+    connect({
+      latitude,
+      longitude,
+      techs,
+    });
+  }
+
   async function loadDevs() {
     const { latitude, longitude } = currentRegion;
 
@@ -115,6 +133,7 @@ function Main({ navigation }) {
     });
 
     setDevs(response.data);
+    setupWebsocket();
   }
 
   function handleRegionChanged(region) {
@@ -174,4 +193,12 @@ function Main({ navigation }) {
   );
 }
 
-export default Main;
+Main.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }),
+};
+
+Main.defaultProps = {
+  navigation: null,
+};
